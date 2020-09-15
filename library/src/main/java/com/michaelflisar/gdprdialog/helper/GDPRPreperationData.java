@@ -42,7 +42,8 @@ public class GDPRPreperationData {
 
     public void load(Context context, ArrayList<String> publisherIds, int readTimeout, int connectTimeout) {
         reset();
-        JSONObject jsonObject = null;
+        //Variable 'jsonObject' initializer 'null' is redundant 
+        JSONObject jsonObject;
         try {
             jsonObject = loadJSON(context, publisherIds, readTimeout, connectTimeout);
             if (jsonObject != null) {
@@ -97,8 +98,8 @@ public class GDPRPreperationData {
 
     private JSONObject loadJSON(Context context, ArrayList<String> publisherIds, int readTimeout, int connectTimeout) throws IOException, JSONException {
         String publisherIdsString = TextUtils.join(",", publisherIds);
-
-        HttpURLConnection urlConnection = null;
+        //Variable 'urlConnection' initializer 'null' is redundant 
+        HttpURLConnection urlConnection;
         URL url = new URL(context.getString(R.string.gdpr_googles_check_is_eaa_request_url, publisherIdsString));
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -112,7 +113,8 @@ public class GDPRPreperationData {
 
         String line;
         while ((line = br.readLine()) != null) {
-            sb.append(line + "\n");
+            //String concatenation as argument to 'StringBuilder.append()' call. Replaced with chained append() calls
+            sb.append(line).append("\n");
         }
         br.close();
 
@@ -120,6 +122,7 @@ public class GDPRPreperationData {
     }
 
     public String logString() {
-        return String.format("{ Location: %s | SubNetworks: %d | Error: %b }", mLocation.name(), mSubNetworks.size(), mError);
+        //Implicitly using the default locale is a common source of bugs: Use String.format(Locale, ...) instead
+        return String.format(Locale.getDefault(), "{ Location: %s | SubNetworks: %d | Error: %b }", mLocation.name(), mSubNetworks.size(), mError);
     }
 }
